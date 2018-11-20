@@ -1,33 +1,25 @@
 // Import from the module './whiteboard':
 //   The default export, naming it draw,
 //   An export named `events`, calling it `whiteboard`.
-import whiteboard, {draw} from './whiteboard'
-import io from 'socket.io-client';
+import whiteboard, {draw, } from './whiteboard';
+import createClientSocket from 'socket.io-client';
 
-// Example of listening to draw events:
-//   (This logging will probably get really annoying):
-whiteboard.on('draw', console.log)
+const clientSocket = createClientSocket(window.location.origin);
+const drawingName = window.location.pathname;
 
-// Example: Draw a single stroke.
-// draw([0, 0], [250, 250], 'red', true)
-
-const socket = io(window.location.origin)
-
-socket.on('connect', () => console.log('I have made a persistent two-way connection to the server!'));
-
-socket.on('load', function (strokes) {
-
-  strokes.forEach(function (stroke) {
-    const { start, end, color } = stroke;
-    draw(start, end, color, false);
-  });
-
+clientSocket.on('connect', () => {
+  console.log('Connected to server!');
+  clientSocket.emit('join-drawing', drawingName);
 });
 
-socket.on('someOneDrew', function (start, end, color) {
+clientSocket.on('replay-drawing', (instructions) => {
+  instructions.forEach(instruction => draw(...instruction, false));
+});
+
+clientSocket.on('draw-from-server', (start, end, color) => {
   draw(start, end, color, false);
 });
 
-whiteboard.on('draw', function (start, end, color) {
-  socket.emit('draw', start, end, color);
+whiteboard.on('draw', (start, end, color) => {
+  clientSocket.emit('draw-from-client', drawingName, start, end, color);
 });
