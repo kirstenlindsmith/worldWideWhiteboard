@@ -2,8 +2,6 @@ const path = require('path');
 const express = require('express');
 const createSocketListener = require('socket.io');
 const app = express();
-const socketio = require('socket.io');
-
 
 // app.listen() returns an http.Server object
 // http://expressjs.com/en/4x/api.html#app.listen
@@ -22,7 +20,6 @@ function getDrawing (drawingName) {
   }
   return drawings[drawingName];
 }
-
 
 socketListener.on('connection', (serverSocket) => {
   console.log(`Connection from client ${serverSocket.id}`);
