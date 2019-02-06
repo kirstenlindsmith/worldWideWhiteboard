@@ -57,14 +57,26 @@ let lastMousePosition = {
 }
 
 /// / Color picker settings
-const colors = [
+//ORIGINAL COLORS:
+// const colors = [
+//   'black',
+//   'purple',
+//   'red',
+//   'green',
+//   'orange',
+//   'yellow',
+//   'brown',
+// ]
+const colors = [ 
   'black',
-  'purple',
   'red',
-  'green',
   'orange',
   'yellow',
-  'brown'
+  'green',
+  'blue',
+  'purple',
+  'brown',
+  'white'
 ]
 
 function setup () {
